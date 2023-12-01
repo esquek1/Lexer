@@ -33,7 +33,9 @@ public class Main {
             int content;
             while ((content = fis.read()) != -1) {
                 currChar = (char) content;
-                System.out.println("currWord: " + currWord);
+                //System.out.println("currWord: " + currWord);
+
+                // Check if string
                 if (currChar == '"' || isStringOrComment) {
                     System.out.println("string: " + currWord);
                     if (currWord.length() == 0) {
@@ -52,31 +54,40 @@ public class Main {
                 } else if (checkIfLetterOrNum(currChar) || isSymbol(currChar)) {
                     // Concatenate currChar to currWord
                     currWord.append(currChar);
-                    boolean ifFound = false;
-
-                    for (Integer tokenId : token.tokens.keySet()) {
-                        if (token.tokens.get(tokenId).contains(currWord.toString())) {
-                            System.out.println("Token Category: " + tokenId + ", value \"" + currWord + "\"");
-                            ifFound = true;
-                            currWord.setLength(0);
-                            break;
-                        }
-                    }
-                } else if (!isStringOrComment) {
+             //   } else if (!isStringOrComment) {
                     // If space, tab, newline, or carriage return, check if the word exists in the token mapping
                     boolean ifFound = false;
+                    StringBuilder tempWord = new StringBuilder();
+                    tempWord.append(currWord);
+                    tempWord.append(currChar);
 
+
+                    /*
+                    read character
+                    check if its a token
+                    if yes, continue reading
+                    else, new word.
+                     */
+                    System.out.println("Checking if its a token: " + currWord);
                     for (Integer tokenId : token.tokens.keySet()) {
-                        if (token.tokens.get(tokenId).contains(currWord.toString())) {
+
+                        // Check if next formed string is in the hashmap
+                        // if it is, read next char
+                        if (token.tokens.get(tokenId).contains(tempWord.toString())) {
+                            System.out.println("Next formed string is a token");
+                            ifFound = false;
+                            break;
+                        }else if (token.tokens.get(tokenId).contains(currWord.toString())) {
+                            // Else, print category and create new word
                             System.out.println("Token Category: " + tokenId + ", value \"" + currWord + "\"");
                             ifFound = true;
-                            currWord.setLength(0);
                             break;
                         }
                     }
 
                     if (!ifFound) {
                         // Check if it's a string
+
                         if(isString){
                             System.out.println("Token Category: 62, string, "+ currWord);
                         }
@@ -92,7 +103,7 @@ public class Main {
     }
 
     private static boolean isSymbol(char c) {
-        char[] symbolArray = {'!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '+', '=', '[', ']',
+        char[] symbolArray = {'!', '@', '#', '$', '%', '&', '*', '(', ')', '-', '_', '+', '=', '[', ']',
                 '{', '}', '|', '\'', '"', ':', '.', ',', '<', '>', '?', '/'};
         for (char currentChar : symbolArray) {
             if (currentChar == c) {

@@ -1,9 +1,3 @@
-end
 classend
 <=
 dog(cat
-9mod9
- dog^cat
- 999dog999
- integer
-  /* unfinished comment

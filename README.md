@@ -1,2 +1,1 @@
-# Lexer
-CS 326 - Lexer By Hand
+# Lexer by hand
